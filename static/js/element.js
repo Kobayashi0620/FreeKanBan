@@ -7,7 +7,7 @@ const body = document.getElementById('BODY');
 let projectName;
 
 // HeaderMenuのひな形
-function makeHdrTmpl(){
+function makeHdrTmp(){
     // <div class='project'></div>
     const project = document.createElement('div');
     project.classList.add('project');
@@ -22,28 +22,21 @@ function makeHdrTmpl(){
 function makeHdrAdd(){
     // <div class='projectAdd'></div>
     const projectAdd = document.createElement('div');
+    projectAdd.setAttribute('id', 'PROJECT_ADD');
     projectAdd.classList.add('projectAdd');
     header.appendChild(projectAdd);
 
-    // <button>+</button>
-    const projectAddButton = document.createElement('button');
-    projectAddButton.textContent = '+';
-    projectAdd.appendChild(projectAddButton);
+    // <p>+</p>
+    const projectAddName = document.createElement('p');
+    projectAddName.textContent = '+';
+    projectAdd.appendChild(projectAddName);
 }
 
-// プロジェクトデータがない場合の要素生成
-function makeHdrInit(){
-    makeHdrTmpl();
-    projectName.textContent = 'Project1';
-    makeHdrAdd();
-}
-
-// プロジェクトデータがある場合の要素生成
+// プロジェクトの要素生成
 function makeHdrMenu(project){
     let i = 0;
-    makeHdrTmpl();
+    makeHdrTmp();
     projectName.textContent = project;
-    makeHdrAdd();
 }
 // ▲header▲
 
@@ -53,7 +46,7 @@ let tableTitle;
 let taskCount;
 
 // tableのひな形
-function makeTableTmpl(){
+function makeTableTmp(){
     // <div class='table'></div>
     table = document.createElement('div');
     table.classList.add('table');
@@ -74,10 +67,10 @@ function makeTableTmpl(){
     taskCount.classList.add('taskCount');
     tableHead.appendChild(taskCount);
 
-    // <i class='fa-solid fa-bars humberger'></i>
-    const humberger = document.createElement('i');
-    humberger.classList.add('fa-solid', 'fa-bars', 'humberger');
-    tableHead.appendChild(humberger)
+    // <i class='fa-solid fa-bars hamburger'></i>
+    const hamburger = document.createElement('i');
+    hamburger.classList.add('fa-solid', 'fa-bars', 'hamburger');
+    tableHead.appendChild(hamburger)
 
     // <div class='taskAdd'></div>
     const taskAdd = document.createElement('div');
@@ -109,13 +102,21 @@ function makeTableAdd(){
     tableAdd.appendChild(tableAddButton);
 }
 
+// テーブルの要素生成
+function makeTable(table){
+    makeTableTmp();
+    table.setAttribute('id', table);
+    tableTitle.textContent = table;
+    taskCount.textContent = 0; //カウント関数に変更
+}
+
 let task;
 let taskTitle;
 let taskContent;
 let taskDeadLine;
 
 // taskのひな形
-function makeTaskTml(){
+function makeTaskTmp(){
     const tableBody = document.getElementById('TABLE_BODY');
 
     // <div class='task'></div>
@@ -171,45 +172,25 @@ function makeTaskTml(){
 
     // <i class="fa-solid fa-trash" id='DELETE_ BUTTON'></i>
     const deleteButton = document.createElement('i');
-    deleteButton.classList.add('fa-solid', 'fa-trash');
+    deleteButton.classList.add('fa-solid', 'fa-trash', 'deleteButton');
     taskFooter.appendChild(deleteButton);
 }
 
-// テーブルデータがない場合の要素生成
-function makeTableInit(){
-    makeTableTmpl();
-    table.setAttribute('id', 'DO');
-    tableTitle.textContent = 'Do';
-    taskCount.textContent = 0; //カウント関数に変更
-
-    makeTableTmpl();
-    table.setAttribute('id', 'DOING');
-    tableTitle.textContent = 'Doing';
-    taskCount.textContent = 0; //カウント関数に変更
-
-    makeTableTmpl();
-    table.setAttribute('id', 'DONE');
-    tableTitle.textContent = 'Done';
-    taskCount.textContent = 0; //カウント関数に変更
-
-    makeTableAdd();
-}
-
-// テーブルデータがある場合の要素生成
-function makeTable(table){
-    makeTableTmpl();
-    table.setAttribute('id', table);
-    tableTitle.textContent = table;
-    taskCount.textContent = 0; //カウント関数に変更
-
-    makeTableAdd();
+// タスクの要素生成
+function makeTask(task){
+    makeTaskTmp();
+    task.setAttribute('id', task.taskId);
+    taskTitle.textContent = task.title;
+    taskContent.textContent = task.content;
+    taskDeadLine = task.deadline;
 }
 // ▲body▲
 
 // グローバルスコープ(関数)
 window.elementMethod = {
-    makeHdrInit : makeHdrInit,
+    makeHdrAdd : makeHdrAdd,
     makeHdrMenu : makeHdrMenu,
-    makeTableInit : makeTableInit,
-    makeTable : makeTable
+    makeTableAdd : makeTableAdd,
+    makeTable : makeTable,
+    makeTask : makeTask
 }
