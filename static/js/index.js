@@ -1,192 +1,103 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // const header = document.getElementById('HEADER');
-    // const body = document.getElementById('BODY');
-
-    let currentProjectId;
-    let currentTableId;
-    let currentTaskId;
+    const header = document.getElementById('HEADER');
+    const body = document.getElementById('BODY');
+    let projects = getStoredData() || [];
 
     // データ保存（ローカルストレージ）
     function setSaveData(saveData){
-        const projects = JSON.stringify(saveData);
-        localStorage.setItem('KANBAN_DATA', projects);
+        localStorage.setItem('KANBAN_DATA', JSON.stringify(saveData));
     };
 
     // データ取得（ローカルストレージ）
     function getStoredData(){
         const kanban = localStorage.getItem('KANBAN_DATA');
-        if(kanban){
-            const projects = JSON.parse(kanban);
-            return projects;
-        }
-        else{
-            return null;
-        }
+        return kanban ? JSON.parse(kanban) : null;
     };
 
-    // header, tableの生成／イベント処理
-    function makeKanban(projects){
+    if(projects.length > 0){
+        renderProjects();
+    }
+    else{
+        const  newProject = {
+            projectId: `project-${Date.now()}`,
+            project: "project",
+            tables: [
+                { tableId: "Do", tasks: [{ taskId: "title", title: "title", content: "content", deadline: `${Date.now()}`, status: [], show_hide: true }] },
+                { tableId: "Doing", tasks: [{ taskId: "title", title: "title", content: "content", deadline: `${Date.now()}`, status: [], show_hide: true }] },
+                { tableId: "Done", tasks: [{ taskId: "title", title: "title", content: "content", deadline: `${Date.now()}`, status: [], show_hide: true }] }
+            ]
+        };
+
+        projects.push(newProject);
+
+        renderProjects();
+    };
+
+    function renderProjects() {
         projects.forEach(project => {
             window.elementMethod.makeHdrMenu(project.project);
-            let headerProject = document.getElementsByClassName('project');
-            currentProjectId = project.project;
-
-            headerProject.addEventListener('click', () => {
-                const currentProject = projects.find(project => project.project === currentProjectId);
-
-                currentProject.tables.forEach(table => {
-                    window.elementMethod.makeTable(table);
-                    currentTableId = table.tableId;
-
-                    const table = document.getElementById(table);
-                    const hamburger = table.querySelector('.hamburger');
-                    hamburger.addEventListener('click', () => {
-                        //モーダル処理記述
-                        alert('モーダル表示／非表示一覧画面処理');
-                    });
-
-                    const taskAdd = table.querySelector('.taskAdd');
-                    taskAdd.addEventListener('click', () => {
-                        // 追加処理記述
-                        alert('タスクの追加処理');
-                    });
-
-                    // 下記内容をTaskが表示されるように改修
-                    const currentTable = projects.find(project => project.project === currentProjectId);
-
-                    currentTable.tasks.forEach(task => {
-                        window.elementMethod.makeTable(table);
-                        currentTaskId = task.taskId;
-
-                        const task = document.getElementById(currentTaskId);
-                        task.addEventListener('click', () => {
-                            // モーダル処理記述
-                            alert('モーダル表示／編集画面処理');
-                        });
-
-                        const task = document.getElementById(task);
-                        const hideButton = table.querySelector('.hideButton');
-                        hideButton.addEventListener('click', () => {
-                            //タスクの非表示処理記述
-                            alert('タスクの非表示処理');
-                        });
-
-                        const deleteButton = table.querySelector('.deleteButton');
-                        deleteButton.addEventListener('click', () => {
-                            // タスクの削除処理記述
-                            alert('タスクの削除処理');
-                        });
-                    });
+            window.elementMethod.makeProject(project.project);
+            project.tables.forEach(table => {
+                window.elementMethod.makeTable(table);
+                table.tasks.forEach(task => {
+                    window.elementMethod.makeTask(table.tableId ,task);
                 });
             });
         });
 
         window.elementMethod.makeHdrAdd();
-        const projectAdd = document.getElementById('PROJECT_ADD');
-
-        projectAdd.addEventListener('click', () => {
-            const newProject = {
-                projectId: `project-${Date.now()}`,
-                project: "project",
-                tables: [
-                    {
-                        tableId: "Do",
-                        tasks: [
-                            {
-                                taskId: "title",
-                                title: "title",
-                                content: "content",
-                                deadline: `${Date.now()}`,
-                                status: [],
-                                show_hide: true
-                            }
-                        ]
-                    },
-                    {
-                        tableId: "Doing",
-                        tasks: [
-                            {
-                                taskId: "title",
-                                title: "title",
-                                content: "content",
-                                deadline: `${Date.now()}`,
-                                status: [],
-                                show_hide: true
-                            }
-                        ]
-                    },
-                    {
-                        tableId: "Done",
-                        tasks: [
-                            {
-                                taskId: "title",
-                                title: "title",
-                                content: "content",
-                                deadline: `${Date.now()}`,
-                                status: [],
-                                show_hide: true
-                            }
-                        ]
-                    }
-                ]
-            }
-            projects.push(newProject);
-        });
+        window.elementMethod.makeTableAdd();
     }
 
-    const projects = getStoredData() ? getStoredData() : [];
-
-    if(projects){
-        makeKanban(projects);
-    }
-    else{
-        const newProject = {
+    function addProject() {
+        const  newProject = {
             projectId: `project-${Date.now()}`,
-            project: "project",
+            project: `project-${Date.now()}`,
             tables: [
-                {
-                    tableId: "Do",
-                    tasks: [
-                        {
-                            taskId: "title",
-                            title: "title",
-                            content: "content",
-                            deadline: `${Date.now()}`,
-                            status: [],
-                            show_hide: true
-                        }
-                    ]
-                },
-                {
-                    tableId: "Doing",
-                    tasks: [
-                        {
-                            taskId: "title",
-                            title: "title",
-                            content: "content",
-                            deadline: `${Date.now()}`,
-                            status: [],
-                            show_hide: true
-                        }
-                    ]
-                },
-                {
-                    tableId: "Done",
-                    tasks: [
-                        {
-                            taskId: "title",
-                            title: "title",
-                            content: "content",
-                            deadline: `${Date.now()}`,
-                            status: [],
-                            show_hide: true
-                        }
-                    ]
-                }
+                { tableId: "Do", tasks: [{ taskId: "title", title: "title", content: "content", deadline: `${Date.now()}`, status: [], show_hide: true }] },
+                { tableId: "Doing", tasks: [{ taskId: "title", title: "title", content: "content", deadline: `${Date.now()}`, status: [], show_hide: true }] },
+                { tableId: "Done", tasks: [{ taskId: "title", title: "title", content: "content", deadline: `${Date.now()}`, status: [], show_hide: true }] }
             ]
-        }
+        };
         projects.push(newProject);
-        makeKanban(projects);
+        setSaveData(projects);
+
+        header.replaceChildren();
+        body.replaceChildren();
+
+        renderProjects();
     }
-    // ▲header▲
+
+    // function addTask(tableId) {
+    //     const newTask = {
+    //         taskId: `task-${Date.now()}`,
+    //         title: "New Task",
+    //         content: "",
+    //         deadline: new Date().toISOString().split('T')[0],
+    //         status: [],
+    //         show_hide: true
+    //     };
+    //     const project = projects.find(p => p.tables.some(t => t.tableId === tableId));
+    //     const table = project.tables.find(t => t.tableId === tableId);
+    //     table.tasks.push(newTask);
+    //     setSaveData(projects);
+    //     renderProjects();
+    // }
+
+    const projectAddName = document.getElementById('PROJECT_ADD_NAME');
+    // イベント委譲
+    projectAddName.addEventListener('click', () => {
+            addProject();
+    });
+
+
+    //     body.addEventListener('click', (event) => {
+    //         if (event.target.classList.contains('taskAddButton')) {
+    //             const tableId = event.target.closest('.table').id;
+    //             addTask(tableId);
+    //         }
+    //         // 他のイベント処理をここに追加
+    //     });
+
+    //     renderProjects();
 });

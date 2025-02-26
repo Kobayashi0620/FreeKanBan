@@ -23,3 +23,177 @@ body{
     display: none;
     margin: auto;
 }
+
+.header{
+    height: 50px;
+    width: 100%;
+    line-height: 50px;
+    display: flex;
+    border-bottom: solid 1px #000;
+
+    overflow: scroll;
+
+    /* IE, Edge 対応 */
+    -ms-overflow-style: none;
+    /* Firefox 対応 */
+    scrollbar-width: none;
+}
+
+/* Chrome, Safari 対応 */
+.box::-webkit-scrollbar {
+    display:none;
+}
+
+.projectMenu{
+    width: 75px;
+    text-align: center;
+    white-space: nowrap;
+    overflow: scroll;
+
+    /* IE, Edge 対応 */
+    -ms-overflow-style: none;
+    /* Firefox 対応 */
+    scrollbar-width: none;
+
+    margin: 0 10px;
+}
+
+.projectMenu p{}
+
+.projectAdd{
+    text-align: center;
+}
+
+.projectAddName{}
+
+.body{}
+
+.project{
+    display: flex;
+    overflow: scroll;
+
+    /* IE, Edge 対応 */
+    -ms-overflow-style: none;
+    /* Firefox 対応 */
+    scrollbar-width: none;
+}
+
+.table{
+    width: 30%;
+    min-width: 350px;
+    height: 100%;
+    background-color: #eee;
+    border-radius: 30px;
+    padding: 10px;
+    margin: 10px;
+}
+
+.tableAdd{
+    width: 30%;
+    min-width: 350px;
+    height: 75px;
+    line-height: 75px;
+    background-color: #eee;
+    border-radius: 30px;
+    text-align: center;
+    margin: 10px;
+}
+
+.tableHead{
+    display: flex;
+    margin: 10px 15px 0 15px;
+}
+
+.tableTitle{}
+
+.taskCount{
+    color: #AAA;
+    margin: 0 0 0 10px;
+}
+
+.hamburger{
+    margin: 0 0 0 auto;
+}
+
+.taskAdd{
+    text-align: center;
+    margin: 10px 0 25px 0;
+}
+
+.taskAddButton{}
+
+.taskBody{
+    overflow: scroll;
+
+    /* IE, Edge 対応 */
+    -ms-overflow-style: none;
+    /* Firefox 対応 */
+    scrollbar-width: none;
+}
+
+.tableDel{
+    font-size: 24px;
+    text-align: center;
+}
+
+.tableDelButton{}
+
+.tableAdd p{}
+
+.task{
+    background-color: #F6F7F8;
+    border-radius: 10px;
+    padding: 15px;
+    margin: 0 0 10px 0;
+}
+
+.taskHead{
+    display: flex;
+    justify-content: space-between;
+    margin: 0 0 5px 0;
+}
+
+.taskTitle{
+    font-size: 20px;
+}
+
+.taskEdit{
+    font-size: 20px;
+}
+
+.taskContent{
+    color: #AAAAAA;
+    margin: 0 0 5px 0;
+}
+
+.deadLineArea{
+    display: flex;
+    justify-content: space-between;
+    margin: 0 0 5px 0;
+}
+
+.deadLineContent{
+    display: flex;
+}
+
+.deadLineContent i{
+    margin: 0 10px 0 0;
+}
+
+.deadLineContent p{}
+
+.taskDeadLine{}
+
+.taskFooter{
+    display: flex;
+    justify-content: center;
+}
+
+.hideButton{
+    color: #AAAAAA;
+    margin: 0 15px 0 0;
+}
+
+.deleteButton{
+    color: #AAAAAA;
+}
