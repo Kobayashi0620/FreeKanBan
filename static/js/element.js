@@ -45,7 +45,9 @@ function makeProject(projectId){
 }
 
 // テーブルの要素生成
-function makeTable(tableData){
+function makeTable(projectId,tableData){
+    const project = document.getElementById(projectId);
+
     // <div class='table' id='tableData.tableId'></div>
     const table = document.createElement('div');
     table.setAttribute('id', tableData.tableId);
@@ -76,6 +78,7 @@ function makeTable(tableData){
 
     // <div class='taskAdd'></div>
     const taskAdd = document.createElement('div');
+    taskAdd.setAttribute('id', `TASK_ADD_${tableData.tableId}`);
     taskAdd.classList.add('taskAdd');
     table.appendChild(taskAdd);
 
@@ -104,7 +107,9 @@ function makeTable(tableData){
 }
 
 // tableの最後尾の追加ボタン生成
-function makeTableAdd(){
+function makeTableAdd(projectId){
+    const project = document.getElementById(projectId);
+
     // <div class='tableAdd' id='TABLE_ADD'></div>
     const tableAdd = document.createElement('div');
     tableAdd.classList.add('tableAdd');
