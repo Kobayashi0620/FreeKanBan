@@ -45,7 +45,7 @@ function makeProject(projectId){
 }
 
 // テーブルの要素生成
-function makeTable(projectId,tableData){
+function makeTable(projectId, tableData){
     const project = document.getElementById(projectId);
 
     // <div class='table' id='tableData.tableId'></div>
@@ -68,7 +68,7 @@ function makeTable(projectId,tableData){
     // <p class='taskCount'>   -----------   </p>
     const taskCount = document.createElement('p');
     taskCount.classList.add('taskCount');
-    taskCount.textContent = 0; //カウント関数に変更
+    taskCount.textContent = 0;
     tableHead.appendChild(taskCount);
 
     // <i class='fa-solid fa-bars hamburger'></i>
@@ -139,7 +139,7 @@ function makeTask(tableId, taskData){
     // <p class='taskTitle' id='TASK_TITLE'></p>
     const taskTitle = document.createElement('p');
     taskTitle.classList.add('taskTitle');
-    taskTitle.textContent = taskData.title;
+    taskTitle.textContent = taskData.title || 'NewTitle';
     taskHead.appendChild(taskTitle);
 
     // <i class="fa-solid fa-pen-to-square taskEdit" id=`TASK_EDIT_${taskData.taskId}`></i>
@@ -151,7 +151,7 @@ function makeTask(tableId, taskData){
     // <p class='taskContent' id='TASK_CONTENT'></p>
     const taskContent = document.createElement('p');
     taskContent.classList.add('taskContent');
-    taskContent.textContent = taskData.content;
+    taskContent.textContent = taskData.content || 'NewContent';
     task.appendChild(taskContent);
 
     // <div class='deadLineArea'></div>

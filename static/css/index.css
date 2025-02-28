@@ -127,7 +127,7 @@ body{
 
 .taskAdd{
     text-align: center;
-    margin: 10px 0 25px 0;
+    margin: 25px 0 25px 0;
 }
 
 .taskAddButton{}
@@ -163,7 +163,7 @@ body{
 .taskHead{
     display: flex;
     justify-content: space-between;
-    margin: 0 0 5px 0;
+    margin: 0 0 10px 0;
 }
 
 .taskTitle{
@@ -176,13 +176,13 @@ body{
 
 .taskContent{
     color: #AAAAAA;
-    margin: 0 0 5px 0;
+    margin: 0 0 10px 0;
 }
 
 .deadLineArea{
     display: flex;
     justify-content: space-between;
-    margin: 0 0 5px 0;
+    margin: 0 0 10px 0;
 }
 
 .deadLineContent{
