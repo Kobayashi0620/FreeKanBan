@@ -46,6 +46,39 @@ document.addEventListener('DOMContentLoaded', () => {
             let count = 0;
             window.elementMethod.makeTable(selectProject.projectId, table);
 
+            // 非表示一覧表示イベント
+            const hamburger = document.getElementById(`HAMBURGER_${table.tableId}`);
+            hamburger.addEventListener('click', () => {
+                modal.replaceChildren();
+                count = 0;
+
+                window.elementMethod.openModal();
+                window.elementMethod.makeHideList(table);
+
+                table.tasks.forEach(task => {
+                    if(!task["show_hide"]){
+                        const hideTaskLists = document.getElementById(`HIDE_TASK_LISTS`);
+                        window.elementMethod.makeTask(hideTaskLists, task);
+
+                        // タスク削除イベント
+                        const deleteTask = document.getElementById(`TASK_DELETE_${task.taskId}`);
+                        deleteTask.addEventListener('click', () => {
+                            delTask(table.tableId, task.taskId);
+                        });
+
+                        // タスク非表示イベント
+                        const hiddenTask = document.getElementById(`SHOW_HIDE_${task.taskId}`);
+                        hiddenTask.addEventListener('click', () => {
+                            showHideFunc(table.tableId, task.taskId);
+                        });
+                        count +=1;
+                    };
+                });
+
+                const taskCount = document.getElementById('HIDE_TASK_COUNT');
+                taskCount.textContent = count;
+            });
+
             // プロジェクト追加イベント
             const taskAdd = document.getElementById(`TASK_ADD_${table.tableId}`);
             taskAdd.addEventListener('click', () => {

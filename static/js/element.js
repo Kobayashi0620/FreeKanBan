@@ -200,6 +200,65 @@ function makeTask(parent, taskData){
 };
 // ▲body▲
 
+// ▼modal▼
+// モーダル開閉処理
+function openModal(){
+    overlay.style.display = 'block';
+    modal.style.display = 'block';
+
+    modal.replaceChildren();
+
+    overlay.addEventListener('click', () => {
+        overlay.style.display = 'none';
+        modal.style.display = 'none';
+    });
+};
+
+function makeHideList(tableData){
+    // <div class='modalHead'></div>
+    const modalHead = document.createElement('div');
+    modalHead.classList.add('modalHead');
+    modal.appendChild(modalHead);
+
+    // <p>非表示</p>
+    const modalHeadTitle = document.createElement('p');
+    modalHeadTitle.textContent = '非表示'
+    modalHead.appendChild(modalHeadTitle);
+
+    // <div class='modalBody' id='MODAL_BODY'></div>
+    const modalBody = document.createElement('div');
+    modalBody.setAttribute('id', `MODAL_BODY`);
+    modalBody.classList.add('modalBody');
+    modal.appendChild(modalBody);
+
+    // <div></div>
+    const nameCount = document.createElement('div');
+    nameCount.classList.add('nameCount');
+    modalBody.appendChild(nameCount);
+
+    // <input type='text' class='tableName' id='TABLE_NAME'></input>
+    const tableName = document.createElement('input');
+    tableName.setAttribute('id', 'TABLE_NAME');
+    tableName.classList.add('tableName');
+    tableName.type = 'text';
+    tableName.value = tableData.table
+    nameCount.appendChild(tableName);
+
+    // <p class='hideTaskCount' id='HIDE_TASK_COUNT'></p>
+    const hideTaskCount = document.createElement('p');
+    hideTaskCount.setAttribute('id', 'HIDE_TASK_COUNT');
+    hideTaskCount.classList.add('hideTaskCount');
+    nameCount.appendChild(hideTaskCount);
+
+    // <div class='hideTaskLists'></div>
+    const hideTaskLists = document.createElement('div');
+    hideTaskLists.setAttribute('id', 'HIDE_TASK_LISTS');
+    hideTaskLists.classList.add('hideTaskLists');
+    modalBody.appendChild(hideTaskLists);
+
+};
+// ▲modal▲
+
 // グローバルスコープ(関数)
 window.elementMethod = {
     makeHdrMenu : makeHdrMenu,
@@ -207,5 +266,7 @@ window.elementMethod = {
     makeProject : makeProject,
     makeTable : makeTable,
     makeTableAdd : makeTableAdd,
-    makeTask : makeTask
+    makeTask : makeTask,
+    openModal : openModal,
+    makeHideList : makeHideList
 };
