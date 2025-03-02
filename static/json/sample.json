@@ -4,10 +4,11 @@
         "project": "project1",
         "tables": [
             {
-                "tableId": "Do",
+                "tableId": "Do-${Date.now()",
+                "table": "Do",
                 "tasks": [
                     {
-                        "taskId": "title1",
+                        "taskId": "Task-${Date.now()",
                         "title": "title1",
                         "content": "content1",
                         "deadline": "yy/mm/dd",
@@ -15,7 +16,7 @@
                         "show-hide": true
                     },
                     {
-                        "taskId": "title2",
+                        "taskId": "Task-${Date.now()",
                         "title": "title2",
                         "content": "content2",
                         "deadline": "yy/mm/dd",

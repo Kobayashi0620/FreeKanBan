@@ -5,15 +5,16 @@ const body = document.getElementById('BODY');
 
 // ▼header▼
 // プロジェクトの要素生成
-function makeHdrMenu(projectNameData){
-    // <div class='projectMenu'></div>
+function makeHdrMenu(projectData){
+    // <div class='projectMenu' id='projectNameData'></div>
     const project = document.createElement('div');
+    project.setAttribute('id', `HEADER_${projectData.projectId}`);
     project.classList.add('projectMenu');
     header.appendChild(project);
 
     // <p>project</p>
     const projectName = document.createElement('p');
-    projectName.textContent = projectNameData;
+    projectName.textContent = projectData.project;
     project.appendChild(projectName);
 }
 
@@ -59,16 +60,16 @@ function makeTable(projectId, tableData){
     tableHead.classList.add('tableHead');
     table.appendChild(tableHead);
 
-    // <p class='tableTitle'>tableData.tableId</p>
+    // <p class='tableTitle'>tableData.table</p>
     const tableTitle = document.createElement('p');
     tableTitle.classList.add('tableTitle');
-    tableTitle.textContent = tableData.tableId;
+    tableTitle.textContent = tableData.table || 'NewTable';
     tableHead.appendChild(tableTitle)
 
-    // <p class='taskCount'>   -----------   </p>
+    // <p class='taskCount'></p>
     const taskCount = document.createElement('p');
+    taskCount.setAttribute('id', `TASK_COUNT_${tableData.tableId}`);
     taskCount.classList.add('taskCount');
-    taskCount.textContent = 0;
     tableHead.appendChild(taskCount);
 
     // <i class='fa-solid fa-bars hamburger'></i>
@@ -185,14 +186,16 @@ function makeTask(tableId, taskData){
     taskFooter.classList.add('taskFooter');
     task.appendChild(taskFooter);
 
-    // <p class='hideButton' id='HIDE_BUTTON'>非表示</p>
+    // <p class='hideButton' id=`TASK_HIDE_${taskData.taskId}`>非表示</p>
     const hideButton = document.createElement('p');
+    hideButton.setAttribute('id', `TASK_HIDE_${taskData.taskId}`);
     hideButton.classList.add('hideButton');
     hideButton.textContent = '非表示'
     taskFooter.appendChild(hideButton);
 
-    // <i class="fa-solid fa-trash deleteButton" id='DELETE_ BUTTON'></i>
+    // <i class="fa-solid fa-trash deleteButton" id=`TASK_DELETE_${taskData.taskId}`></i>
     const deleteButton = document.createElement('i');
+    deleteButton.setAttribute('id', `TASK_DELETE_${taskData.taskId}`);
     deleteButton.classList.add('fa-solid', 'fa-trash', 'deleteButton');
     taskFooter.appendChild(deleteButton);
 }
