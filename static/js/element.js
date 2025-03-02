@@ -1,12 +1,12 @@
-// const overlay = document.getElementById('OVERLAY');
-// const modal = document.getElementById('MODAL');
+const overlay = document.getElementById('OVERLAY');
+const modal = document.getElementById('MODAL');
 const header = document.getElementById('HEADER');
 const body = document.getElementById('BODY');
 
 // ▼header▼
 // プロジェクトの要素生成
 function makeHdrMenu(projectData){
-    // <div class='projectMenu' id='projectNameData'></div>
+    // <div class='projectMenu' id=`HEADER_${projectData.projectId}`></div>
     const project = document.createElement('div');
     project.setAttribute('id', `HEADER_${projectData.projectId}`);
     project.classList.add('projectMenu');
@@ -16,7 +16,7 @@ function makeHdrMenu(projectData){
     const projectName = document.createElement('p');
     projectName.textContent = projectData.project;
     project.appendChild(projectName);
-}
+};
 
 // HeaderMenuの最後尾の追加ボタン生成
 function makeHdrAdd(){
@@ -32,7 +32,7 @@ function makeHdrAdd(){
     projectAddName.classList.add('projectAddName');
     projectAddName.textContent = '+';
     projectAdd.appendChild(projectAddName);
-}
+};
 // ▲header▲
 
 // ▼body▼
@@ -43,7 +43,7 @@ function makeProject(projectId){
     project.setAttribute('id', projectId);
     project.classList.add('project');
     body.appendChild(project);
-}
+};
 
 // テーブルの要素生成
 function makeTable(projectId, tableData){
@@ -66,18 +66,19 @@ function makeTable(projectId, tableData){
     tableTitle.textContent = tableData.table || 'NewTable';
     tableHead.appendChild(tableTitle)
 
-    // <p class='taskCount'></p>
+    // <p class='taskCount' id=`TASK_COUNT_${tableData.tableId}`></p>
     const taskCount = document.createElement('p');
     taskCount.setAttribute('id', `TASK_COUNT_${tableData.tableId}`);
     taskCount.classList.add('taskCount');
     tableHead.appendChild(taskCount);
 
-    // <i class='fa-solid fa-bars hamburger'></i>
+    // <i class='fa-solid fa-bars hamburger' id=`HAMBURGER_${tableData.tableId}`></i>
     const hamburger = document.createElement('i');
+    hamburger.setAttribute('id', `HAMBURGER_${tableData.tableId}`);
     hamburger.classList.add('fa-solid', 'fa-bars', 'hamburger');
     tableHead.appendChild(hamburger)
 
-    // <div class='taskAdd'></div>
+    // <div class='taskAdd' id=`TASK_ADD_${tableData.tableId}`></div>
     const taskAdd = document.createElement('div');
     taskAdd.setAttribute('id', `TASK_ADD_${tableData.tableId}`);
     taskAdd.classList.add('taskAdd');
@@ -95,17 +96,17 @@ function makeTable(projectId, tableData){
     taskBody.classList.add('taskBody');
     table.appendChild(taskBody);
 
-    // <div class="tableDel"></div>
+    // <div class='tableDel'></div>
     const tableDel = document.createElement('div');
     tableDel.classList.add('tableDel');
     table.appendChild(tableDel);
 
-    // <i class="fa-solid fa-trash tableDel" id=`TABLE_DEL_${tableData.tableId}`></i>
+    // <i class='fa-solid fa-trash tableDel' id=`TABLE_DEL_${tableData.tableId}`></i>
     const tableDelButton = document.createElement('i');
     tableDelButton.setAttribute('id', `TABLE_DEL_${tableData.tableId}`);
     tableDelButton.classList.add('fa-solid', 'fa-trash', 'tableDel');
     tableDel.appendChild(tableDelButton);
-}
+};
 
 // tableの最後尾の追加ボタン生成
 function makeTableAdd(projectId){
@@ -120,17 +121,15 @@ function makeTableAdd(projectId){
     const tableAddButton = document.createElement('p');
     tableAddButton.textContent = '+ テーブルの追加';
     tableAdd.appendChild(tableAddButton);
-}
+};
 
 // タスクの要素生成
-function makeTask(tableId, taskData){
-    const taskBody = document.getElementById(`TASK_BODY_${tableId}`);
-
+function makeTask(parent, taskData){
     // <div class='task'></div>
     const task = document.createElement('div');
     task.classList.add('task');
     task.setAttribute('id', taskData.taskId);
-    taskBody.appendChild(task);
+    parent.appendChild(task);
 
     // <div class='taskHead'></div>
     const taskHead = document.createElement('div');
@@ -143,7 +142,7 @@ function makeTask(tableId, taskData){
     taskTitle.textContent = taskData.title || 'NewTitle';
     taskHead.appendChild(taskTitle);
 
-    // <i class="fa-solid fa-pen-to-square taskEdit" id=`TASK_EDIT_${taskData.taskId}`></i>
+    // <i class='fa-solid fa-pen-to-square taskEdit' id=`TASK_EDIT_${taskData.taskId}`></i>
     const taskEdit = document.createElement('i');
     taskEdit.setAttribute('id', `TASK_EDIT_${taskData.taskId}`);
     taskEdit.classList.add('fa-solid', 'fa-pen-to-square', 'taskEdit');
@@ -181,24 +180,24 @@ function makeTask(tableId, taskData){
     taskDeadLine.textContent = taskData.deadline;
     deadLineArea.appendChild(taskDeadLine);
 
-    // <div class='taskFotter' id='TASK_FOOTER'></div>
+    // <div class='taskFooter' id='TASK_FOOTER'></div>
     const taskFooter = document.createElement('div');
     taskFooter.classList.add('taskFooter');
     task.appendChild(taskFooter);
 
-    // <p class='hideButton' id=`TASK_HIDE_${taskData.taskId}`>非表示</p>
-    const hideButton = document.createElement('p');
-    hideButton.setAttribute('id', `TASK_HIDE_${taskData.taskId}`);
-    hideButton.classList.add('hideButton');
-    hideButton.textContent = '非表示'
-    taskFooter.appendChild(hideButton);
+    // <p class='showHideButton' id=`SHOW_HIDE_${taskData.taskId}`>非表示</p>
+    const showHideButton = document.createElement('p');
+    showHideButton.setAttribute('id', `SHOW_HIDE_${taskData.taskId}`);
+    showHideButton.classList.add('showHideButton');
+    showHideButton.textContent = '非表示';
+    taskFooter.appendChild(showHideButton);
 
-    // <i class="fa-solid fa-trash deleteButton" id=`TASK_DELETE_${taskData.taskId}`></i>
+    // <i class='fa-solid fa-trash deleteButton' id=`TASK_DELETE_${taskData.taskId}`></i>
     const deleteButton = document.createElement('i');
     deleteButton.setAttribute('id', `TASK_DELETE_${taskData.taskId}`);
     deleteButton.classList.add('fa-solid', 'fa-trash', 'deleteButton');
     taskFooter.appendChild(deleteButton);
-}
+};
 // ▲body▲
 
 // グローバルスコープ(関数)
@@ -209,4 +208,4 @@ window.elementMethod = {
     makeTable : makeTable,
     makeTableAdd : makeTableAdd,
     makeTask : makeTask
-}
+};

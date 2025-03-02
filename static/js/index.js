@@ -1,4 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
+    const modal = document.getElementById('MODAL');
     const header = document.getElementById('HEADER');
     const body = document.getElementById('BODY');
     let projects = getStoredData() || [];
@@ -45,7 +46,7 @@ document.addEventListener('DOMContentLoaded', () => {
             let count = 0;
             window.elementMethod.makeTable(selectProject.projectId, table);
 
-            // プロジェクト追加処理
+            // プロジェクト追加イベント
             const taskAdd = document.getElementById(`TASK_ADD_${table.tableId}`);
             taskAdd.addEventListener('click', () => {
                 addTask(table.tableId);
@@ -59,25 +60,49 @@ document.addEventListener('DOMContentLoaded', () => {
 
             table.tasks.forEach(task => {
                 if(task["show_hide"]){
-                    window.elementMethod.makeTask(table.tableId, task);
+                    const taskBody = document.getElementById(`TASK_BODY_${table.tableId}`);
+                    window.elementMethod.makeTask(taskBody, task);
 
-                    // タスク削除処理
+                    // タスク削除イベント
                     const deleteTask = document.getElementById(`TASK_DELETE_${task.taskId}`);
                     deleteTask.addEventListener('click', () => {
                         delTask(table.tableId, task.taskId);
                     });
 
-                    // タスク非表示処理
-                    const hiddenTask = document.getElementById(`TASK_HIDE_${task.taskId}`);
+                    // タスク非表示イベント
+                    const hiddenTask = document.getElementById(`SHOW_HIDE_${task.taskId}`);
                     hiddenTask.addEventListener('click', () => {
-                        hiddenTaskFunc(table.tableId, task.taskId);
+                        showHideFunc(table.tableId, task.taskId);
                     });
                     count +=1;
-                }
+
+                    // dadイベント
+                    const taskElement = document.getElementById(task.taskId);
+                    taskElement.setAttribute('draggable', true);
+                    taskElement.addEventListener('dragstart', (event) => {
+                        event.dataTransfer.setData('text/plain', JSON.stringify({
+                            taskId: task.taskId,
+                            fromTableId: table.tableId
+                        }));
+                    });
+                };
             });
 
             const taskCount = document.getElementById(`TASK_COUNT_${table.tableId}`);
             taskCount.textContent = count;
+
+            // dadイベント
+            const taskBody = document.getElementById(`TASK_BODY_${table.tableId}`);
+            taskBody.addEventListener('dragover', (event) => {
+                event.preventDefault();
+            });
+            taskBody.addEventListener('drop', (event) => {
+                event.preventDefault();
+                const data = JSON.parse(event.dataTransfer.getData('text/plain'));
+                if (data.fromTableId !== table.tableId) {
+                    moveTask(data.taskId, data.fromTableId, table.tableId);
+                }
+            });
         });
         window.elementMethod.makeTableAdd(selectProject.projectId);
 
@@ -96,9 +121,9 @@ document.addEventListener('DOMContentLoaded', () => {
             projectId: `PROJECT_${Date.now()}`,
             project: 'NewProject',
             tables: [
-                { tableId: `D0_${Date.now()}`, table: "Do", tasks: [{ taskId: "title", title: "Title", content: "Content", deadline: `${new Date().toISOString().split('T')[0]}`, status: [], show_hide: true }] },
-                { tableId: `DOING_${Date.now()}`, table: "Doing", tasks: [{ taskId: "title", title: "Title", content: "Content", deadline: `${new Date().toISOString().split('T')[0]}`, status: [], show_hide: true }] },
-                { tableId: `DONE_${Date.now()}`, table: "Done", tasks: [{ taskId: "title", title: "Title", content: "Content", deadline: `${new Date().toISOString().split('T')[0]}`, status: [], show_hide: true }] }
+                { tableId: `D0_${Date.now()}`, table: "Do", tasks: [] },
+                { tableId: `DOING_${Date.now()}`, table: "Doing", tasks: [] },
+                { tableId: `DONE_${Date.now()}`, table: "Done", tasks: [] }
             ]
         };
 
@@ -164,17 +189,26 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // タスク非表示処理
-    function hiddenTaskFunc(tableId, taskId){
+    function showHideFunc(tableId, taskId){
         const project = projects.find(p => p.tables.some(t => t.tableId === tableId));
         const table = project.tables.find(t => t.tableId === tableId);
         const task = table.tasks.find(task => task.taskId === taskId);
-        task["show_hide"] = false;
+        task["show_hide"] = task["show_hide"] ? false : true;
         setSaveData(projects);
         renderProjects();
     }
 
     // タスク移動処理
-    function dadTask(){
+    function moveTask(taskId, fromTableId, toTableId) {
+        const project = projects.find(p => p.tables.some(t => t.tableId === fromTableId));
+        const fromTable = project.tables.find(t => t.tableId === fromTableId);
+        const toTable = project.tables.find(t => t.tableId === toTableId);
+        const task = fromTable.tasks.find(task => task.taskId === taskId);
+
+        fromTable.tasks = fromTable.tasks.filter(task => task.taskId !== taskId);
+        toTable.tasks.push(task);
+        setSaveData(projects);
+        renderProjects();
     }
 
     // 初期処理
@@ -187,9 +221,9 @@ document.addEventListener('DOMContentLoaded', () => {
             projectId: `PROJECT_${Date.now()}`,
             project: "Project",
             tables: [
-                { tableId: "Do", table: "Do", tasks: [{ taskId:`TASK_${Date.now()}`, title: "Title", content: "Content", deadline: `${new Date().toISOString().split('T')[0]}`, status: [], show_hide: true }] },
-                { tableId: "Doing", table: "Doing", tasks: [{ taskId: `TASK_${Date.now()}`, title: "Title", content: "Content", deadline: `${new Date().toISOString().split('T')[0]}`, status: [], show_hide: true }] },
-                { tableId: "Done", table: "Done", tasks: [{ taskId: `TASK_${Date.now()}`, title: "Title", content: "Content", deadline: `${new Date().toISOString().split('T')[0]}`, status: [], show_hide: true }] }
+                { tableId: "Do", table: "Do", tasks: [] },
+                { tableId: "Doing", table: "Doing", tasks: [] },
+                { tableId: "Done", table: "Done", tasks: [] }
             ]
         };
 
