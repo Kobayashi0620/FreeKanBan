@@ -30,6 +30,12 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         });
         window.elementMethod.makeHdrAdd();
+
+        // プロジェクト追加イベント
+        const projectAddName = document.getElementById('PROJECT_ADD_NAME');
+        projectAddName.addEventListener('click', () => {
+            addProject();
+        });
     };
 
     // body表示処理
@@ -114,7 +120,8 @@ document.addEventListener('DOMContentLoaded', () => {
                     taskElement.addEventListener('dragstart', (event) => {
                         event.dataTransfer.setData('text/plain', JSON.stringify({
                             taskId: task.taskId,
-                            fromTableId: table.tableId
+                            fromTableId: table.tableId,
+                            fromIndex: table.tasks.indexOf(task)
                         }));
                     });
                 };
@@ -134,6 +141,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (data.fromTableId !== table.tableId) {
                     moveTask(data.taskId, data.fromTableId, table.tableId);
                 }
+                else if (data.fromIndex !== undefined) { // テーブル内での並び替えの場合
+                    const toIndex = Array.from(taskBody.children).indexOf(event.target.closest('.task'));
+                    if (toIndex !== -1 && toIndex !== data.fromIndex) {
+                        moveTaskInTable(data.taskId, table.tableId, data.fromIndex, toIndex);
+                    };
+                };
             });
         });
         window.elementMethod.makeTableAdd(selectProject.projectId);
@@ -263,6 +276,18 @@ document.addEventListener('DOMContentLoaded', () => {
         renderProjects();
     };
 
+    // テーブル内タスク移動処理
+    function moveTaskInTable(taskId, tableId, fromIndex, toIndex) {
+        const project = projects.find(p => p.tables.some(t => t.tableId === tableId));
+        const table = project.tables.find(t => t.tableId === tableId);
+        const task = table.tasks.find(task => task.taskId === taskId);
+
+        table.tasks.splice(fromIndex, 1);
+        table.tasks.splice(toIndex, 0, task);
+        setSaveData(projects);
+        renderProjects();
+    }
+
     // モーダルタスク削除処理
     function modalDelTask(tableId, taskId){
         const paramList = delTask(tableId, taskId);
@@ -389,10 +414,4 @@ document.addEventListener('DOMContentLoaded', () => {
         projectList();
         renderProjects();
     };
-
-    // プロジェクト追加イベント
-    const projectAddName = document.getElementById('PROJECT_ADD_NAME');
-    projectAddName.addEventListener('click', () => {
-        addProject();
-    });
 });
