@@ -49,34 +49,7 @@ document.addEventListener('DOMContentLoaded', () => {
             // 非表示一覧表示イベント
             const hamburger = document.getElementById(`HAMBURGER_${table.tableId}`);
             hamburger.addEventListener('click', () => {
-                modal.replaceChildren();
-                count = 0;
-
-                window.elementMethod.openModal();
-                window.elementMethod.makeHideList(table);
-
-                table.tasks.forEach(task => {
-                    if(!task["show_hide"]){
-                        const hideTaskLists = document.getElementById(`HIDE_TASK_LISTS`);
-                        window.elementMethod.makeTask(hideTaskLists, task);
-
-                        // タスク削除イベント
-                        const deleteTask = document.getElementById(`TASK_DELETE_${task.taskId}`);
-                        deleteTask.addEventListener('click', () => {
-                            delTask(table.tableId, task.taskId);
-                        });
-
-                        // タスク非表示イベント
-                        const hiddenTask = document.getElementById(`SHOW_HIDE_${task.taskId}`);
-                        hiddenTask.addEventListener('click', () => {
-                            showHideFunc(table.tableId, task.taskId);
-                        });
-                        count +=1;
-                    };
-                });
-
-                const taskCount = document.getElementById('HIDE_TASK_COUNT');
-                taskCount.textContent = count;
+                hideTaskLists(selectProject, table);
             });
 
             // プロジェクト追加イベント
@@ -96,6 +69,32 @@ document.addEventListener('DOMContentLoaded', () => {
                     const taskBody = document.getElementById(`TASK_BODY_${table.tableId}`);
                     window.elementMethod.makeTask(taskBody, task);
 
+                    // タスク編集イベント
+                    const editTask = document.getElementById(`TASK_EDIT_${task.taskId}`);
+                    editTask.addEventListener('click', () => {
+                        window.elementMethod.openModal();
+                        window.elementMethod.makeTaskEdit(task);
+
+                        const taskTitle = document.getElementById('EDIT_TASK_TITLE');
+                        const taskContent = document.getElementById('EDIT_TASK_CONTENT');
+                        const inputDeadline = document.getElementById('EDIT_INPUT_DEADLINE');
+
+                        taskTitle.addEventListener('change', () => {
+                            const editList = [taskTitle.value, taskContent.value, inputDeadline.value];
+                            editTaskFunc(table.tableId, task.taskId, editList);
+                        });
+
+                        taskContent.addEventListener('change', () => {
+                            const editList = [taskTitle.value, taskContent.value, inputDeadline.value];
+                            editTaskFunc(table.tableId, task.taskId, editList);
+                        });
+
+                        inputDeadline.addEventListener('change', () => {
+                            const editList = [taskTitle.value, taskContent.value, inputDeadline.value];
+                            editTaskFunc(table.tableId, task.taskId, editList);
+                        });
+                    });
+
                     // タスク削除イベント
                     const deleteTask = document.getElementById(`TASK_DELETE_${task.taskId}`);
                     deleteTask.addEventListener('click', () => {
@@ -105,7 +104,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     // タスク非表示イベント
                     const hiddenTask = document.getElementById(`SHOW_HIDE_${task.taskId}`);
                     hiddenTask.addEventListener('click', () => {
-                        showHideFunc(table.tableId, task.taskId);
+                        hideTaskFunc(table.tableId, task.taskId);
                     });
                     count +=1;
 
@@ -145,7 +144,7 @@ document.addEventListener('DOMContentLoaded', () => {
             addTable(selectProject.projectId);
         });
 
-        projectList()
+        projectList();
     };
 
     // プロジェクト追加処理
@@ -177,7 +176,7 @@ document.addEventListener('DOMContentLoaded', () => {
         project.tables.push(newTable);
         setSaveData(projects);
         renderProjects();
-    }
+    };
 
     // テーブル削除処理
     function delTable(tableId){
@@ -191,7 +190,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         setSaveData(projects);
         renderProjects();
-    }
+    };
 
     // タスク追加処理
     function addTask(tableId) {
@@ -212,6 +211,20 @@ document.addEventListener('DOMContentLoaded', () => {
         renderProjects();
     };
 
+    // タスク編集処理
+    function editTaskFunc(tableId, taskId, editList){
+        const project = projects.find(p => p.tables.some(t => t.tableId === tableId));
+        const table = project.tables.find(t => t.tableId === tableId);
+        const task = table.tasks.find(task => task.taskId === taskId);
+
+        task.title = editList[0];
+        task.content = editList[1];
+        task.deadline = editList[2];
+
+        setSaveData(projects);
+        renderProjects();
+    };
+
     // タスク削除処理
     function delTask(tableId, taskId){
         const project = projects.find(p => p.tables.some(t => t.tableId === tableId));
@@ -219,17 +232,23 @@ document.addEventListener('DOMContentLoaded', () => {
         table.tasks = table.tasks.filter(task => task.taskId !== taskId);
         setSaveData(projects);
         renderProjects();
-    }
+
+        const paramList = [project, table];
+        return paramList;
+    };
 
     // タスク非表示処理
-    function showHideFunc(tableId, taskId){
+    function hideTaskFunc(tableId, taskId){
         const project = projects.find(p => p.tables.some(t => t.tableId === tableId));
         const table = project.tables.find(t => t.tableId === tableId);
         const task = table.tasks.find(task => task.taskId === taskId);
         task["show_hide"] = task["show_hide"] ? false : true;
         setSaveData(projects);
         renderProjects();
-    }
+
+        const paramList = [project, table];
+        return paramList;
+    };
 
     // タスク移動処理
     function moveTask(taskId, fromTableId, toTableId) {
@@ -242,7 +261,112 @@ document.addEventListener('DOMContentLoaded', () => {
         toTable.tasks.push(task);
         setSaveData(projects);
         renderProjects();
-    }
+    };
+
+    // モーダルタスク削除処理
+    function modalDelTask(tableId, taskId){
+        const paramList = delTask(tableId, taskId);
+        hideTaskLists(paramList[0], paramList[1]);
+    };
+
+    // モーダルタスク表示処理
+    function showTaskFunc(tableId, taskId){
+        const paramList = hideTaskFunc(tableId, taskId);
+        hideTaskLists(paramList[0], paramList[1]);
+    };
+
+    // モーダルプロジェクト名変更処理
+    function editProjectName(projectId, projectTitle){
+        const project = projects.find(p => p.projectId === projectId);
+        project.project = projectTitle;
+        setSaveData(projects);
+        renderProjects();
+    };
+
+    // モーダルテーブル名変更処理
+    function editTableName(tableId, tableTitle){
+        const project = projects.find(p => p.tables.some(t => t.tableId === tableId));
+        const table = project.tables.find(t => t.tableId === tableId);
+        table.table = tableTitle;
+        setSaveData(projects);
+        renderProjects();
+        hideTaskLists(project, table);
+    };
+
+    // 非表示タスク一覧表示
+    function hideTaskLists(project, table){
+        modal.replaceChildren();
+        count = 0;
+
+        window.elementMethod.openModal();
+        window.elementMethod.makeHideList(project, table);
+
+        // プロジェクト名変更
+        const projectName = document.getElementById('EDIT_PROJECT_NAME');
+        projectName.addEventListener('change', () => {
+            const projectTitle = projectName.value;
+            editProjectName(project.projectId, projectTitle);
+        });
+
+        // テーブル名変更
+        const tableName = document.getElementById('EDIT_TABLE_NAME');
+        tableName.addEventListener('change', () => {
+            const tableTitle = tableName.value;
+            editTableName(table.tableId, tableTitle);
+        });
+
+        table.tasks.forEach(task => {
+            if(!task["show_hide"]){
+                const hideTaskLists = document.getElementById(`EDIT_HIDE_TASK_LISTS`);
+                window.elementMethod.makeTask(hideTaskLists, task);
+
+                const showHideButton = document.getElementById(`SHOW_HIDE_${task.taskId}`);
+                showHideButton.textContent ='表示';
+
+                // タスク編集イベント
+                const editTask = document.getElementById(`TASK_EDIT_${task.taskId}`);
+                editTask.addEventListener('click', () => {
+                    window.elementMethod.openModal();
+                    window.elementMethod.makeTaskEdit(task);
+
+                    const editTaskTitle = document.getElementById('EDIT_TASK_TITLE');
+                    const editTaskContent = document.getElementById('EDIT_TASK_CONTENT');
+                    const editInputDeadline = document.getElementById('EDIT_INPUT_DEADLINE');
+
+                    editTaskTitle.addEventListener('change', () => {
+                        const editList = [editTaskTitle.value, editTaskContent.value, editInputDeadline.value];
+                        editTaskFunc(table.tableId, task.taskId, editList);
+                    });
+
+                    editTaskContent.addEventListener('change', () => {
+                        const editList = [editTaskTitle.value, editTaskContent.value, editInputDeadline.value];
+                        editTaskFunc(table.tableId, task.taskId, editList);
+                    });
+
+                    editInputDeadline.addEventListener('change', () => {
+                        const editList = [editTaskTitle.value, editTaskContent.value, editInputDeadline.value];
+                        editTaskFunc(table.tableId, task.taskId, editList);
+                    });
+                });
+
+                // タスク削除イベント
+                const deleteTask = document.getElementById(`TASK_DELETE_${task.taskId}`);
+                deleteTask.addEventListener('click', () => {
+                    modalDelTask(table.tableId, task.taskId);
+                });
+
+                // タスク表示イベント
+                const hiddenTask = document.getElementById(`SHOW_HIDE_${task.taskId}`);
+                hiddenTask.addEventListener('click', () => {
+                    showTaskFunc(table.tableId, task.taskId);
+                });
+                count +=1;
+            };
+        });
+
+        const taskCount = document.getElementById('EDIT_HIDE_TASK_COUNT');
+        taskCount.textContent = count;
+    };
 
     // 初期処理
     if(projects.length > 0){
@@ -269,6 +393,6 @@ document.addEventListener('DOMContentLoaded', () => {
     // プロジェクト追加イベント
     const projectAddName = document.getElementById('PROJECT_ADD_NAME');
     projectAddName.addEventListener('click', () => {
-            addProject();
+        addProject();
     });
 });

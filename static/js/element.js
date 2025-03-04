@@ -214,48 +214,140 @@ function openModal(){
     });
 };
 
-function makeHideList(tableData){
-    // <div class='modalHead'></div>
-    const modalHead = document.createElement('div');
-    modalHead.classList.add('modalHead');
-    modal.appendChild(modalHead);
+// タスク編集画面生成
+function makeTaskEdit(taskData){
+    // <div class='editDisplay'></div>
+    const editDisplay = document.createElement('div');
+    editDisplay.classList.add('editDisplay');
+    modal.appendChild(editDisplay);
+
+    // <input type='text' class='editTaskTitle' id='EDIT_TASK_TITLE'>
+    const editTaskTitle = document.createElement('input');
+    editTaskTitle.setAttribute('id', 'EDIT_TASK_TITLE');
+    editTaskTitle.classList.add('editTaskTitle');
+    editTaskTitle.type = 'text';
+    editTaskTitle.value = taskData.title || 'NewTitle';
+    editDisplay.appendChild(editTaskTitle);
+
+    // <div class='editTaskContentArea'></div>
+    const editTaskContentArea = document.createElement('div');
+    editTaskContentArea.classList.add('editTaskContentArea');
+    editDisplay.appendChild(editTaskContentArea);
+
+    // <p class='editTaskContentLabel'>コンテンツ</p>
+    const editTaskContentLabel = document.createElement('p');
+    editTaskContentLabel.classList.add('editTaskContentLabel');
+    editTaskContentLabel.textContent = 'コンテンツ';
+    editTaskContentArea.appendChild(editTaskContentLabel);
+
+    // <textarea class='editTaskContent' id='EDIT_TASK_CONTENT'></textarea>
+    const editTaskContent = document.createElement('textarea');
+    editTaskContent.setAttribute('id', 'EDIT_TASK_CONTENT');
+    editTaskContent.classList.add('editTaskContent');
+    editTaskContent.textContent = taskData.content || 'NewContent';
+    editTaskContentArea.appendChild(editTaskContent);
+
+    // <div class='editDeadlineArea'></div>
+    const editDeadlineArea = document.createElement('div');
+    editDeadlineArea.classList.add('editDeadlineArea');
+    editDisplay.appendChild(editDeadlineArea);
+
+    // <div class='editDeadlineContent'></div>
+    const editDeadlineContent = document.createElement('div');
+    editDeadlineContent.classList.add('editDeadlineContent');
+    editDeadlineArea.appendChild(editDeadlineContent);
+
+    // <i class='fa-regular fa-calendar'></i>
+    const editDeadlineIcon = document.createElement('i');
+    editDeadlineIcon.classList.add('fa-regular', 'fa-calendar');
+    editDeadlineContent.appendChild(editDeadlineIcon);
+
+    // <p>締切</p>
+    const editDeadline = document.createElement('p');
+    editDeadline.textContent = '締切';
+    editDeadlineContent.appendChild(editDeadline);
+
+    // <input type='date' class='editInputDeadline' id='EDIT_INPUT_DEADLINE'>
+    const editInputDeadline = document.createElement('input');
+    editInputDeadline.setAttribute('id', 'EDIT_INPUT_DEADLINE');
+    editInputDeadline.classList.add('editInputDeadline');
+    editInputDeadline.type = 'date';
+    editInputDeadline.value = taskData.deadline;
+    editDeadlineArea.appendChild(editInputDeadline);
+
+    // // <div class='statusArea'></div>
+    // const statusArea = document.createElement('div');
+    // statusArea.classList.add('statusArea');
+    // modal.appendChild(statusArea);
+
+    // // <p>ステータス</p>
+    // const status = document.createElement('p');
+    // status.textContent = 'ステータス';
+    // statusArea.appendChild(status);
+
+    // // <input type='text' class='statusInput' id='STATUS_INPUT'>
+    // const statusInput = document.createElement('input');
+    // statusInput.setAttribute('STATUS_INPUT');
+    // statusInput.classList.add('statusInput');
+    // statusInput.type = '';
+    // statusArea.appendChild(statusInput);
+}
+
+// 非表示一覧画面生成
+function makeHideList(projectData, tableData){
+    // <div class='hideDisplay'></div>
+    const hideDisplay = document.createElement('div');
+    hideDisplay.classList.add('hideDisplay');
+    modal.appendChild(hideDisplay);
+
+    // <div class='editModalHead'></div>
+    const editModalHead = document.createElement('div');
+    editModalHead.classList.add('editModalHead');
+    hideDisplay.appendChild(editModalHead);
 
     // <p>非表示</p>
-    const modalHeadTitle = document.createElement('p');
-    modalHeadTitle.textContent = '非表示'
-    modalHead.appendChild(modalHeadTitle);
+    const editModalHeadTitle = document.createElement('p');
+    editModalHeadTitle.textContent = '非表示'
+    editModalHead.appendChild(editModalHeadTitle);
 
-    // <div class='modalBody' id='MODAL_BODY'></div>
-    const modalBody = document.createElement('div');
-    modalBody.setAttribute('id', `MODAL_BODY`);
-    modalBody.classList.add('modalBody');
-    modal.appendChild(modalBody);
+    // <div class='editNameCount'></div>
+    const editNameCount = document.createElement('div');
+    editNameCount.classList.add('editNameCount');
+    hideDisplay.appendChild(editNameCount);
 
-    // <div></div>
-    const nameCount = document.createElement('div');
-    nameCount.classList.add('nameCount');
-    modalBody.appendChild(nameCount);
+    // <input type='text' class='editProjectName' id='EDIT_PROJECT_NAME'>
+    const editProjectName = document.createElement('input');
+    editProjectName.setAttribute('id', 'EDIT_PROJECT_NAME');
+    editProjectName.classList.add('editProjectName');
+    editProjectName.type = 'text';
+    editProjectName.value = projectData.project;
+    editNameCount.appendChild(editProjectName);
 
-    // <input type='text' class='tableName' id='TABLE_NAME'></input>
-    const tableName = document.createElement('input');
-    tableName.setAttribute('id', 'TABLE_NAME');
-    tableName.classList.add('tableName');
-    tableName.type = 'text';
-    tableName.value = tableData.table
-    nameCount.appendChild(tableName);
+    // <p class='editNameSlash'>／</p>
+    const editNameSlash = document.createElement('p');
+    editNameSlash.classList.add('editNameSlash');
+    editNameSlash.textContent = '／';
+    editNameCount.appendChild(editNameSlash);
 
-    // <p class='hideTaskCount' id='HIDE_TASK_COUNT'></p>
-    const hideTaskCount = document.createElement('p');
-    hideTaskCount.setAttribute('id', 'HIDE_TASK_COUNT');
-    hideTaskCount.classList.add('hideTaskCount');
-    nameCount.appendChild(hideTaskCount);
+    // <input type='text' class='editNableName' id='EDIT_TABLE_NAME'>
+    const editNableName = document.createElement('input');
+    editNableName.setAttribute('id', 'EDIT_TABLE_NAME');
+    editNableName.classList.add('editNableName');
+    editNableName.type = 'text';
+    editNableName.value = tableData.table;
+    editNameCount.appendChild(editNableName);
 
-    // <div class='hideTaskLists'></div>
-    const hideTaskLists = document.createElement('div');
-    hideTaskLists.setAttribute('id', 'HIDE_TASK_LISTS');
-    hideTaskLists.classList.add('hideTaskLists');
-    modalBody.appendChild(hideTaskLists);
+    // <p class='editHideTaskCount' id='EDIT_HIDE_TASK_COUNT'></p>
+    const editHideTaskCount = document.createElement('p');
+    editHideTaskCount.setAttribute('id', 'EDIT_HIDE_TASK_COUNT');
+    editHideTaskCount.classList.add('editHideTaskCount');
+    editNameCount.appendChild(editHideTaskCount);
 
+    // <div class='editHideTaskLists' id='EDIT_HIDE_TASK_LISTS'></div>
+    const editHideTaskLists = document.createElement('div');
+    editHideTaskLists.setAttribute('id', 'EDIT_HIDE_TASK_LISTS');
+    editHideTaskLists.classList.add('editHideTaskLists');
+    hideDisplay.appendChild(editHideTaskLists);
 };
 // ▲modal▲
 
@@ -268,5 +360,6 @@ window.elementMethod = {
     makeTableAdd : makeTableAdd,
     makeTask : makeTask,
     openModal : openModal,
+    makeTaskEdit : makeTaskEdit,
     makeHideList : makeHideList
 };
