@@ -249,6 +249,7 @@ body{
 .task{
     background-color: #F6F7F8;
     border-radius: 10px;
+    user-select: none;
     padding: 15px;
     margin: 0 0 10px 0;
 }
@@ -261,6 +262,7 @@ body{
 
 .taskTitle{
     font-size: 20px;
+    user-select: none;
 }
 
 .taskEdit{
@@ -269,6 +271,7 @@ body{
 
 .taskContent{
     color: #AAAAAA;
+    user-select: none;
     margin: 0 0 10px 0;
 }
 
@@ -280,10 +283,15 @@ body{
 
 .deadLineContent{
     display: flex;
+    user-select: none;
 }
 
 .deadLineContent i{
     margin: 0 10px 0 0;
+}
+
+.taskDeadLine{
+    user-select: none;
 }
 
 .taskFooter{
@@ -293,6 +301,7 @@ body{
 
 .showHideButton{
     color: #AAAAAA;
+    user-select: none;
     margin: 0 15px 0 0;
 }
 

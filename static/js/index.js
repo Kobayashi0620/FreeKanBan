@@ -78,7 +78,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     // タスク編集イベント
                     const editTask = document.getElementById(`TASK_EDIT_${task.taskId}`);
                     editTask.addEventListener('click', () => {
-                        window.elementMethod.openModal();
+                        openModal();
                         window.elementMethod.makeTaskEdit(task);
 
                         const taskTitle = document.getElementById('EDIT_TASK_TITLE');
@@ -124,7 +124,7 @@ document.addEventListener('DOMContentLoaded', () => {
                             fromIndex: table.tasks.indexOf(task)
                         }));
                     });
-                };
+                }
             });
 
             const taskCount = document.getElementById(`TASK_COUNT_${table.tableId}`);
@@ -141,7 +141,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (data.fromTableId !== table.tableId) {
                     moveTask(data.taskId, data.fromTableId, table.tableId);
                 }
-                else if (data.fromIndex !== undefined) { // テーブル内での並び替えの場合
+                else if (data.fromIndex !== undefined) {
                     const toIndex = Array.from(taskBody.children).indexOf(event.target.closest('.task'));
                     if (toIndex !== -1 && toIndex !== data.fromIndex) {
                         moveTaskInTable(data.taskId, table.tableId, data.fromIndex, toIndex);
@@ -323,7 +323,7 @@ document.addEventListener('DOMContentLoaded', () => {
         modal.replaceChildren();
         count = 0;
 
-        window.elementMethod.openModal();
+        openModal();
         window.elementMethod.makeHideList(project, table);
 
         // プロジェクト名変更
@@ -351,7 +351,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 // タスク編集イベント
                 const editTask = document.getElementById(`TASK_EDIT_${task.taskId}`);
                 editTask.addEventListener('click', () => {
-                    window.elementMethod.openModal();
+                    openModal();
                     window.elementMethod.makeTaskEdit(task);
 
                     const editTaskTitle = document.getElementById('EDIT_TASK_TITLE');
@@ -391,6 +391,20 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const taskCount = document.getElementById('EDIT_HIDE_TASK_COUNT');
         taskCount.textContent = count;
+    };
+
+    // モーダル開閉処理
+    function openModal(){
+        overlay.style.display = 'block';
+        modal.style.display = 'block';
+
+        modal.replaceChildren();
+
+        overlay.addEventListener('click', () => {
+            overlay.style.display = 'none';
+            modal.style.display = 'none';
+            renderProjects();
+        });
     };
 
     // 初期処理

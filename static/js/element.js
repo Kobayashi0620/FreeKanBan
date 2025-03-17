@@ -64,7 +64,7 @@ function makeTable(projectId, tableData){
     const tableTitle = document.createElement('p');
     tableTitle.classList.add('tableTitle');
     tableTitle.textContent = tableData.table || 'NewTable';
-    tableHead.appendChild(tableTitle)
+    tableHead.appendChild(tableTitle);
 
     // <p class='taskCount' id=`TASK_COUNT_${tableData.tableId}`></p>
     const taskCount = document.createElement('p');
@@ -76,7 +76,7 @@ function makeTable(projectId, tableData){
     const hamburger = document.createElement('i');
     hamburger.setAttribute('id', `HAMBURGER_${tableData.tableId}`);
     hamburger.classList.add('fa-solid', 'fa-bars', 'hamburger');
-    tableHead.appendChild(hamburger)
+    tableHead.appendChild(hamburger);
 
     // <div class='taskAdd' id=`TASK_ADD_${tableData.tableId}`></div>
     const taskAdd = document.createElement('div');
@@ -87,7 +87,7 @@ function makeTable(projectId, tableData){
     // <p class='taskAddButton' id='TASK_ADD_BUTTON'>+ タスクの追加</p>
     const taskAddButton = document.createElement('p');
     taskAddButton.classList.add('taskAddButton');
-    taskAddButton.textContent = '+ タスクの追加'
+    taskAddButton.textContent = '+ タスクの追加';
     taskAdd.appendChild(taskAddButton);
 
     // <div class='taskBody' id=`TASK_BODY_${tableData.tableId}`></div>
@@ -108,7 +108,7 @@ function makeTable(projectId, tableData){
     tableDel.appendChild(tableDelButton);
 };
 
-// tableの最後尾の追加ボタン生成
+// テーブルの最後尾の追加ボタン生成
 function makeTableAdd(projectId){
     const project = document.getElementById(projectId);
 
@@ -201,19 +201,6 @@ function makeTask(parent, taskData){
 // ▲body▲
 
 // ▼modal▼
-// モーダル開閉処理
-function openModal(){
-    overlay.style.display = 'block';
-    modal.style.display = 'block';
-
-    modal.replaceChildren();
-
-    overlay.addEventListener('click', () => {
-        overlay.style.display = 'none';
-        modal.style.display = 'none';
-    });
-};
-
 // タスク編集画面生成
 function makeTaskEdit(taskData){
     // <div class='editDisplay'></div>
@@ -307,7 +294,7 @@ function makeHideList(projectData, tableData){
 
     // <p>非表示</p>
     const editModalHeadTitle = document.createElement('p');
-    editModalHeadTitle.textContent = '非表示'
+    editModalHeadTitle.textContent = '非表示';
     editModalHead.appendChild(editModalHeadTitle);
 
     // <div class='editNameCount'></div>
@@ -359,7 +346,6 @@ window.elementMethod = {
     makeTable : makeTable,
     makeTableAdd : makeTableAdd,
     makeTask : makeTask,
-    openModal : openModal,
     makeTaskEdit : makeTaskEdit,
     makeHideList : makeHideList
 };
